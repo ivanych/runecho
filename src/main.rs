@@ -58,6 +58,7 @@ fn main() {
     // Выполнить команду
     let status = process::Command::new(cmd).args(args).status();
 
+    // Определить код выхода команды
     let code = match status {
         Ok(status) => match status.code() {
             Some(_) => status.code(),
