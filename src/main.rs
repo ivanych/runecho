@@ -29,6 +29,12 @@ fn main() {
         // Среди них могут быть начинающиеся на тирe и их не нужно парсить, это опции для command.
         .setting(AppSettings::TrailingVarArg)
         .arg(
+            Arg::with_name("stderr")
+                .help("Показывать запускаемую команду на STDERR вместо STDOUT")
+                .short("e")
+                .long("stderr")
+        )
+        .arg(
             Arg::with_name("prompt")
                 .help("Приглашение командной строки")
                 .value_name("STRING")
@@ -53,7 +59,12 @@ fn main() {
     let args = &command[1..];
 
     // Показать команду
-    println!("{} {} {}", prompt, cmd, args.join(" "));
+    if params.is_present("stderr") {
+        eprintln!("{} {} {}", prompt, cmd, args.join(" "));
+    }
+    else {
+        println!("{} {} {}", prompt, cmd, args.join(" "));
+    }
 
     // Выполнить команду
     let status = process::Command::new(cmd).args(args).status();
